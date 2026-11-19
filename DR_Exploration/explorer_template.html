@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Game Sales | Linked DR Explorer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#172d44;font:14px system-ui,sans-serif}header{background:#152e48;color:white;padding:24px 30px}h1{font-size:26px;margin:0 0 8px}h2{font-size:17px;margin:0 0 8px}.sub{color:#cfdae6;line-height:1.5}main{max-width:1500px;margin:auto;padding:18px}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600}select,input,button{font:inherit;padding:8px;border:1px solid #acb9c7;border-radius:5px;background:white;color:#172d44}input{width:100px}button{cursor:pointer;background:#176d7f;color:white;border:0;padding:10px 15px}button.secondary{background:#506477}.card{background:white;border:1px solid #dce3eb;border-radius:9px;padding:14px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.plot{height:340px;min-width:0}.status{font-weight:650;padding:13px 0;color:#176d7f}.hint{font-size:12px;color:#566b80;line-height:1.6}.tablewrap{max-height:260px;overflow:auto}table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:7px;border-bottom:1px solid #e5e9ef;text-align:left}th{position:sticky;top:0;background:#edf2f6}#detail{line-height:1.6}footer{padding:10px 0 25px;color:#53677b}@media(max-width:1000px){.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.plot{height:360px}}
+</style>
+<script>__PLOTLY__</script>
+<header><h1>Video Game Sales · Data & Projection</h1><div class="sub">PCA, t-SNE and an interactive LAMP extension. Inspect every apparent cluster against its original features.<br>Anderson Zhu · Krish Thakre · Vasista Vegesana</div></header>
+<main><section class="card"><div class="controls">
+<label>Genre cohort<select id="genre"><option value="">All genres</option></select></label>
+<label>Original X<select id="x"></select></label><label>Original Y<select id="y"></select></label>
+<label>Range feature<select id="range"></select></label><label>Minimum<input id="min" type="number" placeholder="No minimum"></label><label>Maximum<input id="max" type="number" placeholder="No maximum"></label>
+<button id="apply">Select feature range</button><button id="reset" class="secondary">Reset selection</button></div>
+<div id="status" class="status" role="status"></div><div class="hint">Drag a box or choose lasso in a plot toolbar. Click a point for one release. Genre and range controls select from original data; map coordinates stay fixed. Sales are millions of units. Gray always shows the full sample.</div></section>
+<div class="grid"><section class="card"><h2>PCA · Linear variance</h2><div id="pca" class="plot"></div></section><section class="card"><h2>t-SNE · Local neighborhoods</h2><div id="tsne" class="plot"></div></section><section class="card"><h2>Original feature space</h2><div id="raw" class="plot"></div></section></div>
+<section class="card"><h2>LAMP · Steer a local affine projection</h2>
+<div class="controls"><label>Interaction mode<select id="lampMode"><option value="steer">Steer controls</option><option value="brush">Brush releases</option></select></label>
+<label>Control release<select id="lampControl" style="max-width:370px"></select></label>
+<label>Control X<input id="lampX" type="number" step="0.1"></label><label>Control Y<input id="lampY" type="number" step="0.1"></label>
+<button id="moveControl">Move control</button><button id="lampExample">Example move (+2, −2)</button><button id="lampReset" class="secondary">Reset LAMP</button></div>
+<p class="hint">Drag an amber control, then release to recompute the entire LAMP map. Or use the coordinate fields. Switch to Brush releases to select a rectangle. Click any ordinary point to inspect it. MDS coordinate units are shared by baseline and current maps.</p>
+<div id="lampState" class="status" role="status">Baseline · MDS controls</div><div id="lampQuality" class="hint" role="status"></div>
+<canvas id="lampCanvas" width="1200" height="440" aria-label="Interactive LAMP projection. Use the control selector and coordinate fields to move controls with the keyboard." style="width:100%;height:440px;touch-action:none;display:block"></canvas>
+<div id="lampDetail" class="hint"></div></section>
+<div class="two"><section class="card"><h2>Linked feature profiles</h2><div id="profiles" class="plot"></div><div class="hint">Profiles use the same log-sales / standardized-year inputs as DR. Thin lines: up to 60 selected releases. Teal: entire selection mean. Gray: full-sample mean (zero).</div></section><section class="card"><h2>Original distribution · selected vs. all</h2><label>Inspect feature<select id="histFeature"></select></label><div id="histogram" style="height:300px"></div><div class="hint">Overlaid densities are normalized separately for each cohort; compare shape, not cohort size.</div></section></div>
+<section class="card"><h2>Selected releases</h2><div id="detail"></div><div class="tablewrap"><table><thead><tr><th>Source row</th><th>Game</th><th>Platform</th><th>Genre</th><th>Year</th><th>NA</th><th>EU</th><th>JP</th><th>Other</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<footer>Historical dataset through 2016 · Embeddings use four log-transformed regional sales dimensions and standardized year · t-SNE perplexity 30, seed 42 · Apparent islands do not establish natural clusters or global distances.</footer></main>
+<script>
+const D=__PAYLOAD__, rec=D.records, F=D.features, ids=rec.map((_,i)=>i), $=id=>document.getElementById(id);
+let selected=new Set(ids), source='All sampled releases';
+const fields=['x','y','range','histFeature'];fields.forEach(id=>F.forEach(f=>{let o=document.createElement('option');o.value=f;o.textContent=f;$(id).append(o)}));
+$('x').value='Year';$('y').value='JP_Sales';$('range').value='JP_Sales';$('histFeature').value='JP_Sales';
+[...new Set(rec.map(r=>r.Genre))].sort().forEach(g=>{let o=document.createElement('option');o.textContent=g;o.value=g;$('genre').append(o)});
+const config={responsive:true,displaylogo:false,modeBarButtonsToRemove:['sendDataToCloud']};
+function label(f){return f==='Year'?'Release year':f+' (million units)'}
+function text(r){return r.Name+' · '+r.Platform+' · '+r.Genre+' · '+r.Year+' · row '+r.Source_Row}
+function scatterData(id){let Z=id==='pca'?D.pca:id==='tsne'?D.tsne:rec.map(r=>[r[$('x').value],r[$('y').value]]);return [{type:'scattergl',mode:'markers',x:Z.map(p=>p[0]),y:Z.map(p=>p[1]),customdata:ids,text:rec.map(text),hovertemplate:'%{text}<extra></extra>',marker:{color:'#16798b',size:6,opacity:.7},selected:{marker:{color:'#16798b',opacity:.95,size:7}},unselected:{marker:{color:'#bcc6d0',opacity:.25}},selectedpoints:[...selected]}]}
+function layout(id){return {margin:{t:15,b:50,l:55,r:10},dragmode:'select',xaxis:{title:{text:id==='raw'?label($('x').value):id==='pca'?'PC1':'t-SNE 1'},zeroline:false},yaxis:{title:{text:id==='raw'?label($('y').value):id==='pca'?'PC2':'t-SNE 2'},zeroline:false},paper_bgcolor:'white',plot_bgcolor:'#fafbfd',font:{family:'system-ui',size:11},uirevision:id}}
+async function makeScatter(id){await Plotly.newPlot(id,scatterData(id),layout(id),config);$(id).on('plotly_selected',ev=>{if(!ev)return;selected=new Set(ev.points.map(p=>p.customdata));source='Brushed '+id+' cohort';sync()});$(id).on('plotly_click',ev=>{if(!ev.points.length)return;selected=new Set([ev.points[0].customdata]);source='Individual release';sync()});}
+function summary(){const a=[...selected];$('status').textContent=a.length.toLocaleString()+' / '+rec.length.toLocaleString()+' releases selected · '+source;
+ $('detail').textContent=a.length===1?text(rec[a[0]])+' — values are listed below.':a.length?'Showing '+Math.min(100,a.length)+' of '+a.length+' selected releases, ordered by original source row.':'No releases match this selection. Reset or choose another range.';
+ $('rows').replaceChildren();a.slice(0,100).forEach(i=>{let r=rec[i],tr=document.createElement('tr');[r.Source_Row,r.Name,r.Platform,r.Genre,r.Year,r.NA_Sales,r.EU_Sales,r.JP_Sales,r.Other_Sales].forEach(v=>{let td=document.createElement('td');td.textContent=v;tr.append(td)});$('rows').append(tr)});
+ const mean=F.map((_,j)=>a.length?a.reduce((s,i)=>s+D.z[i][j],0)/a.length:null);
+ const lines=a.slice(0,60).map(i=>({x:F,y:D.z[i],mode:'lines',line:{color:'rgba(22,121,139,.12)',width:1},showlegend:false,hoverinfo:'skip'}));
+ lines.push({x:F,y:F.map(()=>0),mode:'lines',name:'All mean',line:{color:'#8998a8',dash:'dash',width:2}});
+ lines.push({x:F,y:mean,mode:'lines+markers',name:'Selected mean',line:{color:'#16798b',width:3},connectgaps:false});
+ Plotly.react('profiles',lines,{margin:{t:15,l:50,b:65,r:12},yaxis:{title:{text:'Transformed z-score'},range:[Math.min(...D.z.flat())-.5,Math.max(...D.z.flat())+.5]},legend:{orientation:'h',y:1.1},font:{size:11}},config);hist();}
+function hist(){let f=$('histFeature').value, vals=rec.map(r=>r[f]),lo=Math.min(...vals),hi=Math.max(...vals),bins={start:lo,end:hi+(hi-lo)/30,size:(hi-lo)/30};Plotly.react('histogram',[{type:'histogram',x:vals,xbins:bins,name:'All',histnorm:'probability density',marker:{color:'#b8c4d0'},opacity:.65},{type:'histogram',x:[...selected].map(i=>rec[i][f]),xbins:bins,name:'Selected',histnorm:'probability density',marker:{color:'#16798b'},opacity:.7}],{margin:{t:15,l:50,r:15,b:50},barmode:'overlay',xaxis:{title:{text:label(f)}},yaxis:{title:{text:'Density'}},legend:{orientation:'h',y:1.15},font:{size:11}},config)}
+function sync(){['pca','tsne','raw'].forEach(id=>Plotly.restyle(id,{selectedpoints:[[...selected]]}));summary();if(typeof drawLamp==='function')drawLamp()}
+function filtered(useRange){let g=$('genre').value,f=$('range').value,mn=$('min').value,mx=$('max').value;selected=new Set(ids.filter(i=>(!g||rec[i].Genre===g)&&(!useRange||((mn===''||rec[i][f]>=Number(mn))&&(mx===''||rec[i][f]<=Number(mx))))));source=useRange?'Original feature range'+(g?' + '+g:''):g||'All sampled releases';sync()}
+$('genre').onchange=()=>filtered(false);$('apply').onclick=()=>filtered(true);$('reset').onclick=()=>{$('genre').value='';$('min').value='';$('max').value='';selected=new Set(ids);source='All sampled releases';sync()};
+['x','y'].forEach(id=>$(id).onchange=()=>Plotly.react('raw',scatterData('raw'),layout('raw'),config));$('histFeature').onchange=hist;
+Promise.all(['pca','tsne','raw'].map(makeScatter)).then(summary);
+</script><script>__LAMP_CORE__</script><script>__LAMP_UI__</script></html>

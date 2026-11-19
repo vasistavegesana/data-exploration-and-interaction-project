@@ -53,3 +53,9 @@ python check_lamp.py
 ```
 
 This also runs `check_lamp.js` using Node.js to compare the independent browser solver with NumPy SVD on all 2,000 baseline and crafted coordinates. Node is needed only for this cross-language validation, not for viewing the explorer or executing its notebook.
+
+## Where the AI disclosure and prompts belong
+
+The final notebook contains the complete AI assistance and revised prompt strategy section because prompt strategy is part of the required notebook report. The HTML report contains the same section. Keep this section in the notebook when submitting.
+
+Edit `PROMPT_STRATEGY.md` to change this text. Both Python builders read that file and embed its contents in the notebook; the HTML report is then exported from that notebook. The Markdown file is a convenient readable copy on GitHub, not a replacement for the notebook disclosure. Include it with the other source files when rebuilding.

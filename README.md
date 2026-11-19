@@ -46,6 +46,6 @@ See [project instructions](DR_Exploration/README.md) and [validation notes](DR_E
 
 The local `vgsales.csv` is reused from the earlier course project based on Gregory Smith’s [Video Game Sales dataset](https://www.kaggle.com/datasets/gregorut/videogamesales). Results describe a historical snapshot through 2016, not current market demand. Each row represents a game-platform release.
 
-LAMP follows Joia et al., **Local Affine Multidimensional Projection**, IEEE TVCG 17(12), 2563–2571 (2011), [DOI](https://doi.org/10.1109/TVCG.2011.220). The authors’ [reference implementation](https://github.com/lgnonato/LAMP) informed an independent implementation. AI assistance and prompts are disclosed in the notebook.
+LAMP follows Joia et al., **Local Affine Multidimensional Projection**, IEEE TVCG 17(12), 2563–2571 (2011), [DOI](https://doi.org/10.1109/TVCG.2011.220). The authors’ [reference implementation](https://github.com/lgnonato/LAMP) informed an independent implementation. AI assistance and revised prompt summaries are disclosed in the notebook and [prompt strategy document](DR_Exploration/PROMPT_STRATEGY.md).
 
 Repository upload is separate from Canvas submission.

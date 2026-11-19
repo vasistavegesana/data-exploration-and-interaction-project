@@ -1,6 +1,6 @@
 # Video Game Sales — Data Exploration and Interaction
 
-ITCS 4123/5123 course project by  Krish Thakre, and Vasista Vegesana**.
+ITCS 4123/5123 course project by  **Krish Thakre, and Vasista Vegesana**.
 
 Explore how game-platform releases compare in their original regional-sales/year features, PCA, t-SNE, and an interactive Local Affine Multidimensional Projection (LAMP) extension.
 

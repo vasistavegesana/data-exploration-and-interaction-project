@@ -110,7 +110,8 @@ def package_project():
     output = ROOT.parent / 'Video_Game_Sales_DR_With_LAMP_Bonus.zip'
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
         for path in sorted(ROOT.iterdir()):
-            if path.is_file() and path.name != '.DS_Store':
+            if (path.is_file() and path.name != '.DS_Store'
+                    and not path.name.casefold().startswith(('peer_evaluation', 'peer evaluation'))):
                 archive.write(path, 'DR_Exploration/' + path.name)
         for filename in ('README.md', '.gitignore'):
             path = ROOT.parent / filename

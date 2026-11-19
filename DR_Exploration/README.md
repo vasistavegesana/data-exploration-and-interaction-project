@@ -8,7 +8,7 @@ Team: Anderson Zhu, Krish Thakre, Vasista Vegesana.
 2. Open `Interactive_Explorer.html` in a browser for the offline linked interface. The report also embeds the interface; if notebook trust or browser restrictions block that frame, use the separate HTML.
 3. Read the results and try the three exploration cases. Review the contribution evaluation (100% each, as requested) before submitting it yourself.
 
-`Video_Game_Sales_DR.ipynb` is the executable notebook requested by Canvas. The HTML files provide convenient review and interaction. `vgsales.csv` is the existing project dataset, copied unchanged. The prior project files remain untouched in the parent folder.
+`Video_Game_Sales_FINAL_DR.ipynb` is the executable notebook requested by Canvas. The HTML files provide convenient review and interaction. `vgsales.csv` is the existing project dataset, copied unchanged. The prior project files remain untouched in the parent folder.
 
 ## Reproduce
 
@@ -36,7 +36,7 @@ This creates and executes the notebook, fits PCA, four t-SNE configurations and 
 
 - Two DR methods, original-space comparisons, linked exploration, methodology, prompts and analysis are included.
 - The current evaluator’s ratings are recorded as 100% for each member, including self. Each student still submits their own evaluation. The form is separate and unsubmitted.
-- One student submits the team project. The notebook and companion files are bundled in `Video_Game_Sales_DR_Review_Bundle.zip` in the parent directory.
+- One student submits the team project. The notebook and companion files are bundled in `Video_Game_Sales_DR_With_LAMP_Bonus.zip` in the parent directory.
 - LAMP bonus implemented after the user confirmed instructor approval on November 19, 2026. See the notebook bonus section and `lamp_comparison.png`.
 - Nothing was uploaded or submitted to Canvas.
 
@@ -54,8 +54,10 @@ python check_lamp.py
 
 This also runs `check_lamp.js` using Node.js to compare the independent browser solver with NumPy SVD on all 2,000 baseline and crafted coordinates. Node is needed only for this cross-language validation, not for viewing the explorer or executing its notebook.
 
-## Where the AI disclosure and prompts belong
+## Editing and rebuilding consistently
 
-The final notebook contains the complete AI assistance and revised prompt strategy section because prompt strategy is part of the required notebook report. The HTML report contains the same section. Keep this section in the notebook when submitting.
+`Video_Game_Sales_FINAL_DR.ipynb` is the source notebook. Edit its Markdown for report wording and its code cells for analysis changes. The LAMP implementation comes from `Video_Game_Sales_DR_Code.py` and is inserted into the notebook during each build; edit that implementation in the combined source. The combined Python builder executes that notebook with the current Python environment, preserves every Markdown cell exactly, and refreshes the HTML report, offline explorer, prompt copy, numerical outputs and final ZIP. The final notebook is a required build input.
 
-Edit `PROMPT_STRATEGY.md` to change this text. Both Python builders read that file and embed its contents in the notebook; the HTML report is then exported from that notebook. The Markdown file is a convenient readable copy on GitHub, not a replacement for the notebook disclosure. Include it with the other source files when rebuilding.
+`PROMPT_STRATEGY.md` is exported from the final notebook for convenient GitHub reading. Edit the notebook rather than that generated copy. `build_report.py` is a compatibility entry point that calls the same combined builder.
+
+The contribution-evaluation section removed from the final notebook is not reinserted during generation. The separate evaluation file remains available for the course’s individual submission process.

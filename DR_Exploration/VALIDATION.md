@@ -40,3 +40,17 @@ The user confirmed instructor approval before implementation.
 - Added a reading guide and environment instructions. Saved notebook can be read without rerunning. For reruns, choose .venv-dr-clean/bin/python and restart the kernel.
 - Rechecked the independent LAMP solvers and numerical invariants successfully after runtime update.
 - Exported the updated HTML report and refreshed both review ZIP archives.
+
+## Repository consistency repair — November 19, 2026
+
+- Preserved every Markdown cell from Krish’s `322b0c2` notebook exactly (8 of 8 cells). SHA256 of the JSON-serialized Markdown list: `f21143d3627bac55a9ecfaacf920520d7baf5d454a116d1e363a68740a9d27f5`. No editorial changes were made.
+- Installed the pinned direct dependencies into a fresh virtual environment without system site-packages. `pip check` passed. Tested Python 3.13.9 and NumPy 2.3.5.
+- Executed the documented combined-builder command from the repository root: all 8 code cells executed, with zero warning/error outputs. The builder uses the selected Python interpreter and cleans up its kernel.
+- Corrected a Python escape literal in the explorer-generation code using a raw string, avoiding a SyntaxWarning without changing the generated replacement text.
+- LAMP Python/JavaScript checks passed; maximum absolute discrepancy was 6.22e-15. Control interpolation, baseline restoration, rigid transforms, translation and degenerate cases passed.
+- LAMP metrics matched the prior results exactly; the largest PCA/t-SNE diagnostic difference was 8.86e-11, below reporting precision.
+- Both documented builder entry points resolve to the same build function. The final notebook is the build input, and its Markdown is checked for preservation. The combined source holds the LAMP implementation and inserts its code into the notebook.
+- Both READMEs have no missing local Markdown-link targets. The ZIP passed its integrity check, contains `Video_Game_Sales_FINAL_DR.ipynb`, preserves Krish’s wording, and excludes the deleted notebook filename.
+- The HTML report is exported from the final notebook. The separate prompt document is exported from its existing prompt section. The removed contribution-evaluation section is not reinserted; the separate evaluation file remains.
+- The offline explorer contains embedded scripts/data and has no external script dependency or unresolved generation placeholders.
+- No Canvas submission was made.

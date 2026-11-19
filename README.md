@@ -6,7 +6,7 @@ Explore how game-platform releases compare in their original regional-sales/year
 
 ## Start here
 
-- **[Final executed Jupyter notebook](DR_Exploration/Video_Game_Sales_DR.ipynb)** — methods, outputs, comparisons, prompts, references, and LAMP bonus.
+- **[Final executed Jupyter notebook](DR_Exploration/Video_Game_Sales_FINAL_DR.ipynb)** — methods, outputs, comparisons, prompts, references, and LAMP bonus.
 - **[Download the complete project bundle](Video_Game_Sales_DR_With_LAMP_Bonus.zip)** — notebook, code, dataset, report and supporting files.
 - **[Combined Python code](DR_Exploration/Video_Game_Sales_DR_Code.py)** — notebook builder and LAMP algorithm in one file.
 - **[Interactive explorer](DR_Exploration/Interactive_Explorer.html)** — download and open locally in a browser.
@@ -46,6 +46,6 @@ See [project instructions](DR_Exploration/README.md) and [validation notes](DR_E
 
 The local `vgsales.csv` is reused from the earlier course project based on Gregory Smith’s [Video Game Sales dataset](https://www.kaggle.com/datasets/gregorut/videogamesales). Results describe a historical snapshot through 2016, not current market demand. Each row represents a game-platform release.
 
-LAMP follows Joia et al., **Local Affine Multidimensional Projection**, IEEE TVCG 17(12), 2563–2571 (2011), [DOI](https://doi.org/10.1109/TVCG.2011.220). The authors’ [reference implementation](https://github.com/lgnonato/LAMP) informed an independent implementation. AI assistance and revised prompt summaries are disclosed in the notebook and [prompt strategy document](DR_Exploration/PROMPT_STRATEGY.md).
+LAMP follows Joia et al., **Local Affine Multidimensional Projection**, IEEE TVCG 17(12), 2563–2571 (2011), [DOI](https://doi.org/10.1109/TVCG.2011.220). The authors’ [reference implementation](https://github.com/lgnonato/LAMP) informed an independent implementation. AI assistance and revised prompt summaries are disclosed in the notebook and [prompt strategy document](DR_Exploration/PROMPT_STRATEGY.md). The final notebook contains the authoritative text; rebuilding preserves its Markdown exactly and refreshes the report and prompt copy.
 
 Repository upload is separate from Canvas submission.
